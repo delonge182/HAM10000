@@ -65,6 +65,7 @@
     \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
     \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
                                 % normalem makes italics be italics, not underlines
+    \usepackage{mathrsfs}
     
 
     
@@ -91,6 +92,8 @@
     \definecolor{ansi-cyan-intense}{HTML}{258F8F}
     \definecolor{ansi-white}{HTML}{C5C1B4}
     \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+    \definecolor{ansi-default-inverse-fg}{HTML}{FFFFFF}
+    \definecolor{ansi-default-inverse-bg}{HTML}{000000}
 
     % commands and environments needed by pandoc snippets
     % extracted from the output of `pandoc -s`
@@ -137,11 +140,18 @@
     % Define a nice break command that doesn't care if a line doesn't already
     % exist.
     \def\br{\hspace*{\fill} \\* }
-    % Math Jax compatability definitions
+    % Math Jax compatibility definitions
     \def\gt{>}
     \def\lt{<}
+    \let\Oldtex\TeX
+    \let\Oldlatex\LaTeX
+    \renewcommand{\TeX}{\textrm{\Oldtex}}
+    \renewcommand{\LaTeX}{\textrm{\Oldlatex}}
     % Document parameters
+    % Document title
     \title{loadData}
+    
+    
     
     
     
@@ -286,15 +296,13 @@
         \PY{n+nx}{\PYZdl{}}\PY{p}{.}\PY{n+nx}{getScript}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}https://kmahelona.github.io/ipython\PYZus{}notebook\PYZus{}goodies/ipython\PYZus{}notebook\PYZus{}toc.js\PYZsq{}}\PY{p}{)}\PY{p}{;}
 \end{Verbatim}
 
-
     
     \begin{verbatim}
 <IPython.core.display.Javascript object>
     \end{verbatim}
 
     
-    \hypertarget{introduction}{%
-\subsection{Introduction}\label{introduction}}
+    \subsection{Introduction}\label{introduction}
 
 Deep Learning become one of the most important topic nowadays, not only
 in the field computer science but it starting to penetrate it's way to
@@ -317,10 +325,9 @@ the classification will only choose from given label/answer.
 This can be important for healthcare industry if this project can help
 people identify skin lesion sooner and can be treated immediately.
 
-    \hypertarget{similar-cases}{%
-\subsubsection{Similar cases}\label{similar-cases}}
+    \subsubsection{Similar cases}\label{similar-cases}
 
-Paper that written by Andre Esteva et al.~implemented the similar method
+Paper that written by Andre Esteva et al. implemented the similar method
 which is CNN. By using 129,450 clinical images of skin disease to train
 pre-trained model GoogleNet Inception v3. The classification result
 performance is similar with all tested experts. This demonstrating an
@@ -359,14 +366,11 @@ that very similar with this project. (Challenge2018.isic-archive.com,
          \PY{k+kn}{from} \PY{n+nn}{PIL} \PY{k}{import} \PY{n}{Image}
 \end{Verbatim}
 
-
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}2}]:} \PY{n}{base\PYZus{}skin\PYZus{}dir} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{../src/data}\PY{l+s+s1}{\PYZsq{}}
 \end{Verbatim}
 
-
-    \hypertarget{methods}{%
-\subsection{Methods}\label{methods}}
+    \subsection{Methods}\label{methods}
 
 This project implements Convolutional Neural Network (CNN) to solve the
 image classification. The implementation use Python as programming
@@ -380,11 +384,10 @@ numbers of alternative methods which one can try arbitrary and compare
 the result. Bacause of these reason, I choose to only use CNN but more
 detail about it.
 
-\hypertarget{problem-set}{%
-\subsubsection{Problem set}\label{problem-set}}
+\subsubsection{Problem set}\label{problem-set}
 
 Dataset for this problem consists of 10015 skin lesion images including
-the label and several additional feature (i.e.~age, gender and image
+the label and several additional feature (i.e. age, gender and image
 body location). All images have the same resolution 600x450 pixel (large
 image), therefore it will be resized to 1/3 of original resolution
 become 200x150.
@@ -392,12 +395,11 @@ become 200x150.
 This project consists of four types trials/experiments and compare each
 result in the end, they are: * CNN with standar layer * CNN with standar
 layer and data augmentation * CNN with multiple input. The input not
-only images but values as well (i.e.~ages, gender, localization) * CNN
+only images but values as well (i.e. ages, gender, localization) * CNN
 with transfer learning and data augmentation. Use state of the art
 pre-trained model.
 
-    \hypertarget{data-preparation}{%
-\subsubsection{Data preparation}\label{data-preparation}}
+    \subsubsection{Data preparation}\label{data-preparation}
 
 There are seven labels or classification of skin lesions, they are
 Melanocytic nevi, Melanoma, Benign keratosis-like lesions, Basal cell
@@ -418,7 +420,6 @@ carcinoma, Actinic keratoses, Vascular lesions, Dermatofibroma.
         \PY{p}{\PYZcb{}}
 \end{Verbatim}
 
-
     After create the dictionary for all seven class, store all image path
 and any other features into one dataframe to be used later on training
 and validation.
@@ -433,7 +434,6 @@ and validation.
         \PY{n}{tile\PYZus{}df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{pd}\PY{o}{.}\PY{n}{Categorical}\PY{p}{(}\PY{n}{tile\PYZus{}df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{sex}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{codes}
 \end{Verbatim}
 
-
     The original image is too large, so it should be resize into 1/3
 original size.
 
@@ -441,17 +441,14 @@ original size.
 {\color{incolor}In [{\color{incolor}5}]:} \PY{n}{tile\PYZus{}df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{image}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{n}{tile\PYZus{}df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{path}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{np}\PY{o}{.}\PY{n}{asarray}\PY{p}{(}\PY{n}{Image}\PY{o}{.}\PY{n}{open}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{o}{.}\PY{n}{resize}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{200}\PY{p}{,}\PY{l+m+mi}{150}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{)}       
 \end{Verbatim}
 
-
-    \hypertarget{exploratory-data-analysis}{%
-\subsubsection{Exploratory data
-analysis}\label{exploratory-data-analysis}}
+    \subsubsection{Exploratory data
+analysis}\label{exploratory-data-analysis}
 
 The image distribution is highly imbalance
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}7}]:} \PY{n}{tile\PYZus{}df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{cell\PYZus{}type}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
-
 
 \begin{Verbatim}[commandchars=\\\{\}]
 {\color{outcolor}Out[{\color{outcolor}7}]:} Melanocytic nevi                 6705
@@ -469,7 +466,6 @@ The image distribution is highly imbalance
         \PY{n}{tile\PYZus{}df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{image}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{map}\PY{p}{(}\PY{k}{lambda} \PY{n}{x}\PY{p}{:} \PY{n}{x}\PY{o}{.}\PY{n}{shape}\PY{p}{)}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
-
 \begin{Verbatim}[commandchars=\\\{\}]
 {\color{outcolor}Out[{\color{outcolor}7}]:} (225, 300, 3)    10015
         Name: image, dtype: int64
@@ -479,7 +475,6 @@ The image distribution is highly imbalance
 {\color{incolor}In [{\color{incolor}21}]:} \PY{n}{fig}\PY{p}{,} \PY{n}{ax1} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{n}{figsize} \PY{o}{=} \PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}
          \PY{n}{tile\PYZus{}df}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{cell\PYZus{}type}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{o}{.}\PY{n}{value\PYZus{}counts}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{kind}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bar}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{ax}\PY{o}{=}\PY{n}{ax1}\PY{p}{)}
 \end{Verbatim}
-
 
 \begin{Verbatim}[commandchars=\\\{\}]
 {\color{outcolor}Out[{\color{outcolor}21}]:} <matplotlib.axes.\_subplots.AxesSubplot at 0x2e27f99f128>
@@ -502,15 +497,13 @@ The image distribution is highly imbalance
         \PY{n}{fig}\PY{o}{.}\PY{n}{savefig}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{category\PYZus{}samples.png}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{dpi}\PY{o}{=}\PY{l+m+mi}{300}\PY{p}{)}
 \end{Verbatim}
 
-
     \begin{center}
     \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_16_0.png}
     \end{center}
     { \hspace*{\fill} \\}
     
-    \hypertarget{correlation-between-additional-features}{%
-\subsubsection{Correlation between additional
-features}\label{correlation-between-additional-features}}
+    \subsubsection{Correlation between additional
+features}\label{correlation-between-additional-features}
 
 The correlations between all three additional features are very week,
 the correlation very close to zero. All three features have
@@ -524,7 +517,6 @@ insignificant effect between each other.
          \PY{n}{sns}\PY{o}{.}\PY{n}{heatmap}\PY{p}{(}\PY{n}{plot\PYZus{}df}\PY{o}{.}\PY{n}{corr}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{vmax}\PY{o}{=}\PY{l+m+mf}{0.6}\PY{p}{,} \PY{n}{square}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{annot}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
          \PY{n}{plot\PYZus{}df}\PY{o}{.}\PY{n}{corr}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
-
 
 \begin{Verbatim}[commandchars=\\\{\}]
 {\color{outcolor}Out[{\color{outcolor}14}]:}                    age       sex  localization
@@ -557,7 +549,6 @@ skin lesion increase in accordance to age.
          \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Number of patients}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
          \PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
-
 
     \begin{Verbatim}[commandchars=\\\{\}]
 C:\textbackslash{}Users\textbackslash{}b8060480\textbackslash{}Documents\textbackslash{}anaconda3\textbackslash{}envs\textbackslash{}csc8635\_project\textbackslash{}lib\textbackslash{}site-packages\textbackslash{}numpy\textbackslash{}lib\textbackslash{}histograms.py:754: RuntimeWarning: invalid value encountered in greater\_equal
@@ -623,7 +614,6 @@ C:\textbackslash{}Users\textbackslash{}b8060480\textbackslash{}Documents\textbac
                                  \PY{n}{df\PYZus{}minority\PYZus{}upsampled6}\PY{p}{]}\PY{p}{)}
 \end{Verbatim}
 
-
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}16}]:} \PY{n}{y} \PY{o}{=} \PY{n}{tile\PYZus{}df}\PY{o}{.}\PY{n}{cell\PYZus{}type\PYZus{}idx}
          
@@ -650,9 +640,7 @@ C:\textbackslash{}Users\textbackslash{}b8060480\textbackslash{}Documents\textbac
          \PY{n}{y\PYZus{}test} \PY{o}{=} \PY{n}{to\PYZus{}categorical}\PY{p}{(}\PY{n}{y\PYZus{}test\PYZus{}o}\PY{p}{,} \PY{n}{num\PYZus{}classes} \PY{o}{=} \PY{l+m+mi}{7}\PY{p}{)}
 \end{Verbatim}
 
-
-    \hypertarget{cnn}{%
-\subsubsection{CNN}\label{cnn}}
+    \subsubsection{CNN}\label{cnn}
 
 CNN contains sequence of layers, which has Convolutional Layer, Pooling
 Layer, and Fully-Connected Layer as it's general architecture. CNN
@@ -663,12 +651,11 @@ because pooling capability to reduce dimension of image.
 For generalisation and decrease the overconfidence of the model,
 drop-out layer is also used ini this development.
 
-Gradient Decent optimization algorithm use ``adam'' without any
+Gradient Decent optimization algorithm use "adam" without any
 customization.
 
-    \hypertarget{cnn-with-customized-layer-for-multiple-input}{%
-\subsubsection{CNN with customized layer for multiple
-input}\label{cnn-with-customized-layer-for-multiple-input}}
+    \subsubsection{CNN with customized layer for multiple
+input}\label{cnn-with-customized-layer-for-multiple-input}
 
 The idea of using other features in addition to images came out while
 doing EDA. Probably there is opportunity to make the model more robust.
@@ -676,7 +663,7 @@ I personally very glad for figure this out eventhough it is not common
 in CNN, and I struggled so much to make it work because cannot find a
 working example. In order to use this model, the data features need to
 be cleaned-up first to avoid N/A value and also one-hot encoding for non
-integer input (i.e.~gender)
+integer input (i.e. gender)
 
     \begin{Verbatim}[commandchars=\\\{\}]
 {\color{incolor}In [{\color{incolor}17}]:} \PY{n}{img\PYZus{}input} \PY{o}{=} \PY{n}{Input}\PY{p}{(}\PY{n}{shape}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{150}\PY{p}{,} \PY{l+m+mi}{200}\PY{p}{,}  \PY{l+m+mi}{3}\PY{p}{)}\PY{p}{)}
@@ -725,7 +712,6 @@ integer input (i.e.~gender)
          \PY{n}{model}\PY{o}{.}\PY{n}{compile}\PY{p}{(}\PY{n}{optimizer}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{adam}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{loss}\PY{o}{=}\PY{n}{keras}\PY{o}{.}\PY{n}{losses}\PY{o}{.}\PY{n}{categorical\PYZus{}crossentropy}\PY{p}{,} \PY{n}{metrics}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{accuracy}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
          \PY{n}{model}\PY{o}{.}\PY{n}{summary}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
-
 
     \begin{Verbatim}[commandchars=\\\{\}]
 \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
@@ -803,17 +789,15 @@ Non-trainable params: 576
 
     \end{Verbatim}
 
-    \hypertarget{cnn-with-standard-layer}{%
-\subsubsection{CNN with standard layer}\label{cnn-with-standard-layer}}
+    \subsubsection{CNN with standard layer}\label{cnn-with-standard-layer}
 
 This model develop using combination of five Convolution 2d layers, five
 polling layers, two fully connected layers and output layer using
 softmax as activation to get output as percentages of confidence for all
 class.
 
-    \hypertarget{cnn-with-standard-layer-and-data-augmentation}{%
-\subsubsection{CNN with standard layer and data
-augmentation}\label{cnn-with-standard-layer-and-data-augmentation}}
+    \subsubsection{CNN with standard layer and data
+augmentation}\label{cnn-with-standard-layer-and-data-augmentation}
 
 With the same layer as previous model, this model use data augmentation
 to enhance learning capability and also help to create more sample. Data
@@ -850,10 +834,8 @@ Vertical), Zoom and etc.
         \PY{n}{model}\PY{o}{.}\PY{n}{summary}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
-
-    \hypertarget{cnn-with-transfer-learning-and-data-augmentation}{%
-\subsubsection{CNN with transfer learning and data
-augmentation}\label{cnn-with-transfer-learning-and-data-augmentation}}
+    \subsubsection{CNN with transfer learning and data
+augmentation}\label{cnn-with-transfer-learning-and-data-augmentation}
 
 Transfer learning is to use predefined or pre-trained model and
 configured it to fit the input and output. It can accelerate the
@@ -877,7 +859,6 @@ learning curve. For this project, the pre-trained model is DenseNet121
         \PY{n}{model}\PY{o}{.}\PY{n}{compile}\PY{p}{(}\PY{n}{optimizer}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{adam}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{loss}\PY{o}{=}\PY{n}{keras}\PY{o}{.}\PY{n}{losses}\PY{o}{.}\PY{n}{categorical\PYZus{}crossentropy} \PY{p}{,} \PY{n}{metrics}\PY{o}{=}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{accuracy}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
 \end{Verbatim}
 
-
     \begin{Verbatim}[commandchars=\\\{\}]
 \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_
 Layer (type)                 Output Shape              Param \#   
@@ -895,8 +876,7 @@ Non-trainable params: 83,648
 
     \end{Verbatim}
 
-    \hypertarget{problems}{%
-\subsubsection{Problems}\label{problems}}
+    \subsubsection{Problems}\label{problems}
 
 The hardest technical problem for this project was the imbalance
 dataset, the Melanocytic nevi sample dominates other sample (more than
@@ -929,9 +909,7 @@ will be executed as solution.
 {\color{incolor}In [{\color{incolor}19}]:} \PY{n}{class\PYZus{}weight} \PY{o}{=} \PY{n}{compute\PYZus{}class\PYZus{}weight}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{balanced}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{3}\PY{p}{,}\PY{l+m+mi}{4}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{,}\PY{l+m+mi}{6}\PY{p}{]}\PY{p}{,} \PY{n}{tile\PYZus{}df}\PY{o}{.}\PY{n}{cell\PYZus{}type\PYZus{}idx}\PY{p}{)}
 \end{Verbatim}
 
-
-    \hypertarget{results}{%
-\subsection{Results}\label{results}}
+    \subsection{Results}\label{results}
 
 Out of four model Transfer learning with data augmentation gives the
 best result arround 83\%-85\% accuracy followed by model with standard
@@ -954,7 +932,6 @@ with 70\%-76\% accuracy and CNN with only standard layer scored 75-76\%.
          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Test loss:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{score}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Test accuracy:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{score}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
 \end{Verbatim}
-
 
     \begin{Verbatim}[commandchars=\\\{\}]
 Train on 7511 samples, validate on 2504 samples
@@ -1118,7 +1095,6 @@ Test accuracy: 0.7671725239616614
          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Test loss:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{score}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Test accuracy:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{score}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
 \end{Verbatim}
-
 
     \begin{Verbatim}[commandchars=\\\{\}]
 Train on 7511 samples, validate on 2504 samples
@@ -1355,7 +1331,6 @@ Test accuracy: 0.7687699680511182
         \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Test accuracy:}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{score}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}
 \end{Verbatim}
 
-
     \begin{Verbatim}[commandchars=\\\{\}]
 Epoch 1/60
 468/468 [==============================] - 125s 267ms/step - loss: 0.7596 - acc: 0.7315 - val\_loss: 0.6634 - val\_acc: 0.7584
@@ -1490,7 +1465,6 @@ Epoch 60/60
          \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Saved model to disk}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
 \end{Verbatim}
 
-
     \begin{Verbatim}[commandchars=\\\{\}]
 Saved model to disk
 
@@ -1501,19 +1475,17 @@ Saved model to disk
          \PY{n}{y\PYZus{}score} \PY{o}{=} \PY{n}{model}\PY{o}{.}\PY{n}{predict}\PY{p}{(}\PY{n}{x\PYZus{}test}\PY{p}{)}
 \end{Verbatim}
 
-
-    \hypertarget{evaluation}{%
-\subsubsection{Evaluation}\label{evaluation}}
+    \subsubsection{Evaluation}\label{evaluation}
 
 The best result evaluated using confusion matrix to see how the
 prediction distributed over the classes. The second heat map belows
 shows the percentage of correct/incorrect answer. The lowest percentage
-score is ``dermatofibroma'', the percentage of correct answer is only
-44\% and evenmore the model misclassify ``dermatofibroma'' as
-``Melanocytic nevi'' 25\% of time. Another missclassification is 24\%
-from total predictions of melanoma predicted as ``Melanocytic nevi''
-which in this case can be fatal because if melanoma is not treated at
-early staged it can be deadly.
+score is "dermatofibroma", the percentage of correct answer is only 44\%
+and evenmore the model misclassify "dermatofibroma" as "Melanocytic
+nevi" 25\% of time. Another missclassification is 24\% from total
+predictions of melanoma predicted as "Melanocytic nevi" which in this
+case can be fatal because if melanoma is not treated at early staged it
+can be deadly.
 
 From these two evaluation can be interpreted that this is still an
 unsuccesful model and still far from good and can be considered as fail
@@ -1575,7 +1547,6 @@ model.
          \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
-
     \begin{Verbatim}[commandchars=\\\{\}]
 Confusion matrix, without normalization
 [[  45   10   14    0    8    9    0]
@@ -1612,7 +1583,6 @@ Normalized confusion matrix
          
          \PY{n}{balanced\PYZus{}accuracy\PYZus{}score}\PY{p}{(}\PY{n}{test\PYZus{}class}\PY{p}{,} \PY{n}{predict\PYZus{}class}\PY{p}{)}
 \end{Verbatim}
-
 
 \begin{Verbatim}[commandchars=\\\{\}]
 {\color{outcolor}Out[{\color{outcolor}13}]:} 0.5516761672441042
@@ -1714,7 +1684,6 @@ Normalized confusion matrix
          \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
 \end{Verbatim}
 
-
     \begin{center}
     \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_42_0.png}
     \end{center}
@@ -1738,9 +1707,7 @@ Normalized confusion matrix
         \PY{n}{Resampled} \PY{n}{dataset} \PY{n}{shape} \PY{n}{Counter}\PY{p}{(}\PY{p}{\PYZob{}}\PY{l+m+mi}{0}\PY{p}{:} \PY{l+m+mi}{900}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{:} \PY{l+m+mi}{900}\PY{p}{\PYZcb{}}\PY{p}{)}
 \end{Verbatim}
 
-
-    \hypertarget{discussion}{%
-\subsection{Discussion}\label{discussion}}
+    \subsection{Discussion}\label{discussion}
 
 Although 83\% is generally good score but it is not the case with health
 care. In this industry the accuracy need to be far more accurate the
@@ -1753,9 +1720,8 @@ sample to make a good prediction
 Also several skin lesion types are similar which even an expert can
 hardly recognise it correctly.
 
-\hypertarget{future-opportunity-and-implications}{%
 \subsubsection{Future opportunity and
-implications}\label{future-opportunity-and-implications}}
+implications}\label{future-opportunity-and-implications}
 
 So much room for improvement especially for the data sample, with more
 sample the model can learn better. On the other hand the model can be
@@ -1764,8 +1730,7 @@ enhanced to classify another type of healthy issue.
 With integration with mobile device (smartphone camera), people don't
 need to come to hospital to get first evaluation about their disease.
 
-\hypertarget{reflection}{%
-\subsubsection{Reflection}\label{reflection}}
+\subsubsection{Reflection}\label{reflection}
 
 This project help me so much to understand one of CNN and ways to
 implement it.
@@ -1778,16 +1743,14 @@ Also Deep learning like CNN make me care more about the data quality,
 sometimes I missed how traditional machine learning works. Feature
 engineering can give exposure about the problem domain it self.
 
-    \hypertarget{conclusion}{%
-\subsection{Conclusion}\label{conclusion}}
+    \subsection{Conclusion}\label{conclusion}
 
 The CNN perform very well with the image classification although the
 result still below the standard and expectation.
 
-    \hypertarget{reference}{%
-\subsection{Reference}\label{reference}}
+    \subsection{Reference}\label{reference}
 
-Tschandl, P. et al.~The HAM10000 dataset, a large collection of
+Tschandl, P. et al. The HAM10000 dataset, a large collection of
 multi-source dermatoscopic images of common pigmented skin lesions. Sci.
 Data 5:180161 doi: 10.1038/ sdata.2018.161 (2018).
 
@@ -1803,27 +1766,27 @@ Synthetic Minority Over-sampling Technique. 16, 321-357.
 
 Challenge2018.isic-archive.com. (2019). ISIC 2018 \textbar{} ISIC 2018:
 Skin Lesion Analysis Towards Melanoma Detection. {[}online{]} Available
-at: https://challenge2018.isic-archive.com/ {[}Accessed 25 Jan.~2019{]}.
+at: https://challenge2018.isic-archive.com/ {[}Accessed 25 Jan. 2019{]}.
 
 Kaggle.com. (2019). Dermatology Image Classification \textbar{} Kaggle.
 {[}online{]} Available at:
 https://www.kaggle.com/yuningalexliu/dermatology-image-classification
-{[}Accessed 25 Jan.~2019{]}.
+{[}Accessed 25 Jan. 2019{]}.
 
 Kaggle.com. (2019). Dermatology MNIST: Loading and Processing \textbar{}
 Kaggle. {[}online{]} Available at:
 https://www.kaggle.com/kmader/dermatology-mnist-loading-and-processing
-{[}Accessed 25 Jan.~2019{]}.
+{[}Accessed 25 Jan. 2019{]}.
 
 Bhf.org.uk. (2019). BHF-Turing Cardiovascular Data Science Awards.
 {[}online{]} Available at:
 https://www.bhf.org.uk/for-professionals/information-for-researchers/what-we-fund/bhf-turing-cardiovascular-data-science-awards
-{[}Accessed 25 Jan.~2019{]}.
+{[}Accessed 25 Jan. 2019{]}.
 
 Cs231n.github.io. (2019). CS231n Convolutional Neural Networks for
 Visual Recognition. {[}online{]} Available at:
-http://cs231n.github.io/convolutional-networks/ {[}Accessed 25
-Jan.~2019{]}.
+http://cs231n.github.io/convolutional-networks/ {[}Accessed 25 Jan.
+2019{]}.
 
 
     % Add a bibliography block to the postdoc
